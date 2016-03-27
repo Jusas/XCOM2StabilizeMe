@@ -16,7 +16,9 @@ static function bool CheckForMedkit(XComGameState_Unit TargetUnit)
 		
 	AbilityRef = TargetUnit.FindAbility('GremlinStabilize');
 	if(AbilityRef.ObjectID == 0)
+	{
 		AbilityRef = TargetUnit.FindAbility('MedikitStabilize');
+	}
 	
 	if(AbilityRef.ObjectID != 0)
 	{

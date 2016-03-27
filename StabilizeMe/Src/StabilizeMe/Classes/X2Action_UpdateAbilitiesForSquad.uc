@@ -60,7 +60,11 @@ static function UpdateAbilityOnUnit(StateObjectReference unitRef, name abilityNa
 			NewGameState.AddStateObject(NewUnitState);
 			TacticalRules.InitAbilityForUnit(AbilityTemplate, NewUnitState, NewGameState);
 
-			TacticalRules.SubmitGameState(NewGameState);
+			// Note here: TacticalRules.SubmitGameState did not work when tested loading of Ironman campaign savegame.
+			// History.AddGameStateToHistory however did. Also worked in pure Tactical debug tests.
+			//TacticalRules.SubmitGameState(NewGameState);
+
+			History.AddGameStateToHistory(NewGameState);
 
 			`log("->(StabilizeMe) Added ability '" $ abilityName $ "' to soldier " $ TargetUnit.GetFirstName() $ " " $ TargetUnit.GetLastName());
 		}
