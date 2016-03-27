@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Default" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Guid>4f734e3a-bbee-4f04-b58e-0f2414a99cce</Guid>
+    <Name>Stabilize Me</Name>
+    <Description>Allows stabilization of a soldier that's bleeding out by any other soldier, provided that the soldier that's bleeding out has a Medkit.</Description>
+    <SteamPublishID>0</SteamPublishID>
+    <AssemblyName>StabilizeMe</AssemblyName>
+    <RootNamespace>StabilizeMe</RootNamespace>
+    <ProjectGuid>{04a716b0-eca7-473b-8d71-693f26dca84a}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Config\" />
+    <Folder Include="Content\" />
+    <Folder Include="Localization\" />
+    <Folder Include="Src\" />
+    <Folder Include="Src\StabilizeMe\" />
+    <Folder Include="Src\StabilizeMe\Classes\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ReadMe.txt" />
+    <Content Include="ModPreview.jpg" />
+    <Content Include="Config\XComEditor.ini" />
+    <Content Include="Config\XComEngine.ini" />
+    <Content Include="Config\XComGame.ini" />
+    <Content Include="Localization\XComGame.int" />
+    <Content Include="Src\StabilizeMe\Classes\UISLDebug.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\StabilizeMe\Classes\UISLInsideMission_TriggerEvent.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\StabilizeMe\Classes\X2Ability_StabilizeMedkitOwnerAbility.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\StabilizeMe\Classes\X2Action_UpdateAbilities.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\StabilizeMe\Classes\X2Condition_StabilizeMedkitOwner.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\StabilizeMe\Classes\X2DownloadableContentInfo_StabilizeMe.uc" />
+    <Content Include="Src\StabilizeMe\Classes\X2TacticalGameBeginObserver.uc">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
+</Project>
