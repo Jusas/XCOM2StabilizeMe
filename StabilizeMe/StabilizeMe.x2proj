@@ -18,31 +18,30 @@
     <Folder Include="Src\StabilizeMe\Classes\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ReadMe.txt" />
+    <Content Include="license.md">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="readme.md">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="ModPreview.jpg" />
     <Content Include="Config\XComEditor.ini" />
     <Content Include="Config\XComEngine.ini" />
     <Content Include="Config\XComGame.ini" />
     <Content Include="Localization\XComGame.int" />
-    <Content Include="Src\StabilizeMe\Classes\UISLDebug.uc">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Src\StabilizeMe\Classes\UISLInsideMission_TriggerEvent.uc">
+    <Content Include="Src\StabilizeMe\Classes\UISLInsideMission_TriggerUpdateStabilizeAbilityEvent.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\StabilizeMe\Classes\X2Ability_StabilizeMedkitOwnerAbility.uc">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Src\StabilizeMe\Classes\X2Action_UpdateAbilities.uc">
+    <Content Include="Src\StabilizeMe\Classes\X2Action_UpdateAbilitiesForSquad.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\StabilizeMe\Classes\X2Condition_StabilizeMedkitOwner.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\StabilizeMe\Classes\X2DownloadableContentInfo_StabilizeMe.uc" />
-    <Content Include="Src\StabilizeMe\Classes\X2TacticalGameBeginObserver.uc">
-      <SubType>Content</SubType>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
 </Project>

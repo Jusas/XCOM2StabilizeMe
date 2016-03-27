@@ -6,30 +6,22 @@ static function bool CheckForMedkit(XComGameState_Unit TargetUnit)
 	local StateObjectReference AbilityRef;
 	local XComGameState_Ability AbilityState;
 	local XComGameStateHistory History;
-	local float ValidRange;
 
 	if (TargetUnit == none)
 		return false;
 
 	History = `XCOMHISTORY;
 
-	`log("->(StabilizeMe) CheckForMedkit");
+	//`log("->(StabilizeMe) CheckForMedkit");
 		
 	AbilityRef = TargetUnit.FindAbility('MedikitStabilize');
 	if(AbilityRef.ObjectID != 0)
 	{
 		AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
-		/*AbilityState.GetValidWeaponRange(MinRange, MaxRange);
-			if( class'Helpers'.static.IsUnitInRangeFromLocations(UnitState, TargetState, UnitState.TileLocation, TargetState.TileLocation, MinRange, MaxRange))
-			{*/
 		if(AbilityState.GetCharges() > 0)
 		{
 			return true;
 		}
-		/*if(AbilityState.CanActivateAbility(TargetUnit) == 'AA_Success')
-		{
-			return true;
-		}*/
 	}
 	return false;
 	
@@ -61,6 +53,7 @@ event name CallMeetsConditionWithSource(XComGameState_BaseObject kTarget, XComGa
 
 	if (SourceUnit.ControllingPlayer == TargetUnit.ControllingPlayer)
 	{
+		// 144 is the default CarryUnit distance.
 		if(class'Helpers'.static.IsUnitInRangeFromLocations(SourceUnit, TargetUnit, SourceUnit.TileLocation, TargetUnit.TileLocation, 0, 144))
 		{
 			return 'AA_Success';
