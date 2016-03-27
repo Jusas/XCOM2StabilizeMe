@@ -18,12 +18,6 @@
     <Folder Include="Src\StabilizeMe\Classes\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="license.md">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="readme.md">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="ModPreview.jpg" />
     <Content Include="Config\XComEditor.ini" />
     <Content Include="Config\XComEngine.ini" />
