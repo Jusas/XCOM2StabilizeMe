@@ -7,8 +7,8 @@ Soldiers gain the ability to stabilize any other soldier that is bleeding out an
 
 This mod was created to fix one annoying "feature" in the game. The scenario usually goes something like this:
 
-- <insert alien here> destroys your specialist's cover
-- <insert alien here> scores a critical hit on your specialist
+- \<insert alien here\> destroys your specialist's cover
+- \<insert alien here\> scores a critical hit on your specialist
 - Your specialist is knocked unconscious and is bleeding out
   - and by the way, he's the only one with a medikit
 - You go: _Oh for f*ck sakes! This is bull!_
