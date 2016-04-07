@@ -14,6 +14,8 @@
     <Folder Include="Content\" />
     <Folder Include="Localization\" />
     <Folder Include="Src\" />
+    <Folder Include="Src\XComGame\" />
+    <Folder Include="Src\XComGame\Classes\" />
     <Folder Include="Src\StabilizeMe\" />
     <Folder Include="Src\StabilizeMe\Classes\" />
   </ItemGroup>

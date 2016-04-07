@@ -22,9 +22,9 @@ The mod's operation is quite simple actually. In essence the mod creates a new a
 
 Explained in short:
 
-1. We create a new ability, called _'StabilizeMedkitOwner'_. This ability is like standard stabilize but with special condition, the _X2Condition_StabilizeMedkitOwner_ that checks that the target unit has the standard 'MedikitStabilize' ability and has at least one charge left on that ability.
+1. We create a new ability, called _'StabilizeMedkitOwner'_. This ability is like standard stabilize but with special condition, the _X2Condition_StabilizeMedkitOwner_ that checks that the target unit has the an ability that has a _X2Effect_RemoveEffects_ in its AbilityTargetEffects which removes the _class'X2StatusEffects'.default.BleedingOutName_. Using the X2Effect_RemoveEffects is the standard way of removing effects from units and most if not all medic mods should be doing it that way, which should make the mod compatible with most other medic related mods out there.
 
-2. We create a UIScreenListener that listens the screen change to _UITacticalHUD_. That's when we'll do our dirty work. Once UITacticalHUD is on the screen, we're in tactical combat and we can empower our squad with the new godly ability.
+2. We create a UIScreenListener that listens the screen change to _UITacticalHUD_. That's when we'll do our dirty work. Once UITacticalHUD is on the screen, we're in tactical combat and we can empower our squad with the new godly medical ability.
 
 _Why do we do this only when we enter tactical combat_ you must be asking - the reason is that in this way even when we load an existing save game in the middle of combat the new abilities get applied. As you load the game, the strategic data is loaded, the squad set up and the tactical UI loaded - and that's when we apply our new ability. So whenever you enter tactical combat your squad members get checked for the ability, if they don't have it yet then the ability gets added.
 
