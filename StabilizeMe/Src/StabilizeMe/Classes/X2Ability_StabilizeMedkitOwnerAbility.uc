@@ -75,10 +75,102 @@ static function X2AbilityTemplate AddStabilizeMedkitOwnerAbility()
 
 	Template.ActivationSpeech = 'StabilizingAlly';
 
-	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildNewGameStateFn = StabilizeMedkitOwner_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	
 	`log("->(StabilizeMe) AddStabilizeMedkitOwnerAbility has been run.");
 
 	return Template;
+}
+
+static function XComGameState StabilizeMedkitOwner_BuildGameState(XComGameStateContext Context)
+{
+	local XComGameState NewGameState;
+	local XComGameStateContext_Ability AbilityContext;
+	local XComGameState_Unit Target;
+	local XComGameState_Ability AbilityState, UpdatedAbility, SharedAbility;
+	local XComGameState_Item Item;
+	local X2AbilityCost AbilityCost;
+	local X2AbilityCost_Charges Charges;
+	local name SharedAbilityName;
+	local StateObjectReference SharedAbilityRef;
+
+	NewGameState = `XCOMHISTORY.CreateNewGameState(true, Context);
+	// usual ability handling
+	TypicalAbility_FillOutGameState(NewGameState);
+
+	// deduct an ability charge from the target, on the same ability that made StabilizeMedkitOwner available
+	AbilityContext = XComGameStateContext_Ability(Context);
+	Target = XComGameState_Unit(NewGameState.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
+	AbilityState = class'X2Condition_StabilizeMedkitOwner'.static.CheckForMedkit(Target);
+
+	if(AbilityState != none && AbilityState.GetCharges() > 0)
+	{
+		// try to get the ability state from the NewGameState
+		// otherwise create and add it
+		UpdatedAbility = XComGameState_Ability(NewGameState.GetGameStateForObjectID(AbilityState.ObjectID));
+		if(UpdatedAbility == none)
+		{
+			UpdatedAbility = XComGameState_Ability(NewGameState.CreateStateObject(AbilityState.class, AbilityState.ObjectID));
+			NewGameState.AddStateObject(UpdatedAbility);
+		}
+
+
+		// remove 1 charge
+
+		// if the ability uses ammo as charges,
+		// deduct the amount of ammo that would be consumed from the source item
+		if(UpdatedAbility.GetMyTemplate().bUseAmmoAsChargesForHUD)
+		{
+			if (UpdatedAbility.SourceAmmo.ObjectID > 0)
+			{
+				Item = XComGameState_Item(`XCOMHISTORY.GetGameStateForObjectID(UpdatedAbility.SourceAmmo.ObjectID));
+			}
+
+			// if SourceAmmo does not exist or coult not be found, try SourceWeapon
+			if(Item == none && UpdatedAbility.SourceWeapon.ObjectID > 0)
+			{
+				Item = XComGameState_Item(`XCOMHISTORY.GetGameStateForObjectID(UpdatedAbility.SourceWeapon.ObjectID));
+			}
+
+			if(Item != none && Item.Ammo > 0)
+			{
+				// update the item and add it to NewGameState
+				Item = XComGameState_Item(NewGameState.CreateStateObject(Item.class, Item.ObjectID));
+				Item.Ammo -= UpdatedAbility.GetMyTemplate().iAmmoAsChargesDivisor;
+				NewGameState.AddStateObject(Item);
+			}
+		}
+
+		// otherwise subtract from iCharges, if not zero and not negative/infinite
+		else if(UpdatedAbility.iCharges > 0)
+		{
+			// find the X2AbilityCost_Charges
+			foreach UpdatedAbility.GetMyTemplate().AbilityCosts(AbilityCost)
+			{
+				Charges = X2AbilityCost_Charges(AbilityCost);
+				if(Charges != none) break;
+			}
+
+			if(Charges != none)
+			{
+				// apply cost
+				UpdatedAbility.iCharges -= Charges.NumCharges;
+
+				// if there are any other abilities that share charges with this one,
+				// update those too
+				foreach Charges.SharedAbilityCharges(SharedAbilityName)
+				{
+					SharedAbilityRef = Target.FindAbility(SharedAbilityName);
+					if(SharedAbilityRef.ObjectID != 0)
+					{
+						SharedAbility = XComGameState_Ability(NewGameState.CreateStateObject(class'XComGameState_Ability', SharedAbilityRef.ObjectID));
+						SharedAbility.iCharges -= Charges.NumCharges;
+						NewGameState.AddStateObject(SharedAbility);
+					}
+				}
+			}
+		}
+	}
+	return NewGameState;
 }

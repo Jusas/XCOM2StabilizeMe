@@ -1,7 +1,7 @@
 class X2Condition_StabilizeMedkitOwner extends X2Condition;
 
 // Check for a 'MedikitStabilize' ability in the target unit that the unit would be able to activate.
-static function bool CheckForMedkit(XComGameState_Unit TargetUnit)
+static function XComGameState_Ability CheckForMedkit(XComGameState_Unit TargetUnit)
 {
 	local StateObjectReference AbilityRef;
 	local XComGameState_Ability AbilityState;
@@ -15,7 +15,7 @@ static function bool CheckForMedkit(XComGameState_Unit TargetUnit)
 	
 
 	if (TargetUnit == none)
-		return false;
+		return none;
 
 	History = `XCOMHISTORY;
 
@@ -47,7 +47,7 @@ static function bool CheckForMedkit(XComGameState_Unit TargetUnit)
 						if(AbilityState.GetCharges() > 0)
 						{
 							//`log("->(StabilizeMe) Ability has " $ AbilityState.GetCharges() $ " charges, SUCCESS!");
-							return true;
+							return AbilityState;
 						}
 						//`log("->(StabilizeMe) Ability has " $ AbilityState.GetCharges() $ " charges, FAILURE!");
 					}
@@ -57,7 +57,7 @@ static function bool CheckForMedkit(XComGameState_Unit TargetUnit)
 	}
 
 
-	return false;
+	return none;
 	
 }
 
@@ -69,7 +69,7 @@ event name CallMeetsCondition(XComGameState_BaseObject kTarget)
 	if (TargetUnit == none)
 		return 'AA_NotAUnit';
 
-	if (CheckForMedkit(TargetUnit))
+	if (CheckForMedkit(TargetUnit) != none)
 		return 'AA_Success';
 
 	return 'AA_TargetHasNoStabilizeAbility';
