@@ -88,8 +88,12 @@ static function XComGameState StabilizeMedkitOwner_BuildGameState(XComGameStateC
 	local XComGameState NewGameState;
 	local XComGameStateContext_Ability AbilityContext;
 	local XComGameState_Unit Target;
-	local XComGameState_Ability AbilityState, UpdatedAbility;
+	local XComGameState_Ability AbilityState, UpdatedAbility, SharedAbility;
 	local XComGameState_Item Item;
+	local X2AbilityCost AbilityCost;
+	local X2AbilityCost_Charges Charges;
+	local name SharedAbilityName;
+	local StateObjectReference SharedAbilityRef;
 
 	NewGameState = `XCOMHISTORY.CreateNewGameState(true, Context);
 	// usual ability handling
@@ -141,7 +145,31 @@ static function XComGameState StabilizeMedkitOwner_BuildGameState(XComGameStateC
 		// otherwise subtract from iCharges, if not zero and not negative/infinite
 		else if(UpdatedAbility.iCharges > 0)
 		{
-			UpdatedAbility.iCharges -= 1;
+			// find the X2AbilityCost_Charges
+			foreach UpdatedAbility.GetMyTemplate().AbilityCosts(AbilityCost)
+			{
+				Charges = X2AbilityCost_Charges(AbilityCost);
+				if(Charges != none) break;
+			}
+
+			if(Charges != none)
+			{
+				// apply cost
+				UpdatedAbility.iCharges -= Charges.NumCharges;
+
+				// if there are any other abilities that share charges with this one,
+				// update those too
+				foreach Charges.SharedAbilityCharges(SharedAbilityName)
+				{
+					SharedAbilityRef = Target.FindAbility(SharedAbilityName);
+					if(SharedAbilityRef.ObjectID != 0)
+					{
+						SharedAbility = XComGameState_Ability(NewGameState.CreateStateObject(class'XComGameState_Ability', SharedAbilityRef.ObjectID));
+						SharedAbility.iCharges -= Charges.NumCharges;
+						NewGameState.AddStateObject(SharedAbility);
+					}
+				}
+			}
 		}
 	}
 	return NewGameState;
